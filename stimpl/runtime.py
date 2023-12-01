@@ -334,7 +334,6 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                 raise InterpTypeError("Ne operation requires compatible types.")
 
         case While(condition=condition, body=body):
-            """TODO: Implement. """
             # Initialize the result and type for the While loop
             result, result_type = None, None
 
