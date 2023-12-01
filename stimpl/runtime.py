@@ -276,8 +276,15 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             # Evaluate the right operand
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            # Perform the comparison and return the result
-            result = left_value <= right_value
+            if left_value is None and right_value is None:
+                result = True  
+            elif left_value is None:
+                result = True 
+            elif right_value is None:
+                result = False 
+            else:
+                result = left_value <= right_value
+
             return (result, Boolean(), new_state)
 
 
