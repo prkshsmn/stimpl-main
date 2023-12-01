@@ -136,18 +136,14 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             return (result, left_type, new_state)
 
         case Subtract(left=left, right=right):
-            """ TODO: Implement. """
-            # Evaluate the left operand
             left_value, left_type, new_state = evaluate(left, state)
-            # Evaluate the right operand
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            # Ensure both operands are of numeric types
-            if isinstance(left_type, (Integer, FloatingPoint)) and isinstance(right_type, (Integer, FloatingPoint)):
-                # Perform subtraction and return the result with the appropriate type
-                return (left_value - right_value, left_type if isinstance(left_type, Integer) else right_type, new_state)
-            else:
+            if not (isinstance(left_type, (Integer, FloatingPoint)) and isinstance(right_type, (Integer, FloatingPoint))):
                 raise InterpTypeError("Subtraction requires numeric types.")
+            
+            result = left_value - right_value
+            return (result, left_type, new_state)
 
         case Multiply(left=left, right=right):
             """ TODO: Implement. """
