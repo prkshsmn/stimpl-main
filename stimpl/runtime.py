@@ -314,12 +314,16 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             # Evaluate the right operand
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            # Ensure both operands are of numeric types
-            if isinstance(left_type, (Integer, FloatingPoint)) and isinstance(right_type, (Integer, FloatingPoint)):
-                # Perform the comparison and return the result
-                return (left_value >= right_value, Boolean(), new_state)
+            if isinstance(left_value, (int, float, str)) and isinstance(right_value, (int, float, str)):
+                result = left_value >= right_value
+            elif left_value is None or right_value is None:
+
+                result = True if left_value is None and right_value is None else False if left_value is None else True
             else:
-                raise InterpTypeError("Gte operation requires numeric types.")
+                raise InterpTypeError("Gte operation cannot compare these types.")
+
+            return (result, Boolean(), new_state)
+
 
         case Eq(left=left, right=right):
             """ TODO: Implement. """
