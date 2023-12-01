@@ -336,12 +336,10 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             # Evaluate the right operand
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            # Check if both operands are of compatible types
-            if isinstance(left_type, (Integer, FloatingPoint, String, Boolean)) and isinstance(right_type, (Integer, FloatingPoint, String, Boolean)):
-                # Perform the comparison and return the result
-                return (left_value != right_value, Boolean(), new_state)
-            else:
-                raise InterpTypeError("Ne operation requires compatible types.")
+            # Perform the comparison for inequality and return the result
+            result = left_value != right_value
+            return (result, Boolean(), new_state)
+
 
         case While(condition=condition, body=body):
             # Initialize the result and type for the While loop
