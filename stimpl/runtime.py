@@ -138,6 +138,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             return (result, left_type, new_state)
 
         case Subtract(left=left, right=right):
+            """ TODO: Implement. """
             left_value, left_type, new_state = evaluate(left, state)
             right_value, right_type, final_state = evaluate(right, new_state)
 
@@ -145,16 +146,12 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     (isinstance(right_type, Integer) or isinstance(right_type, FloatingPoint))):
                 raise InterpTypeError("Subtraction requires operands of numeric types.")
 
-            if isinstance(left_type, FloatingPoint) or isinstance(right_type, FloatingPoint):
-                result = left_value - right_value
-            else:
-                result = int(left_value) - int(right_value)
-
-            result_type = FloatingPoint() if isinstance(left_type, FloatingPoint) or isinstance(right_type, FloatingPoint) else Integer()
+            result = left_value - right_value
+            result_type = Integer() if isinstance(left_type, Integer) and isinstance(right_type, Integer) else FloatingPoint()
             return (result, result_type, final_state)
 
-
         case Multiply(left=left, right=right):
+            """ TODO: Implement. """
             left_value, left_type, new_state = evaluate(left, state)
             right_value, right_type, final_state = evaluate(right, new_state)
 
@@ -162,27 +159,23 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                     (isinstance(left_type, FloatingPoint) and isinstance(right_type, FloatingPoint))):
                 raise InterpTypeError("Multiplication requires operands of numeric types.")
 
-            if isinstance(left_type, FloatingPoint) or isinstance(right_type, FloatingPoint):
-                result = left_value * right_value
-            else:
-                result = int(left_value) * int(right_value)
-
-            result_type = FloatingPoint() if isinstance(left_type, FloatingPoint) or isinstance(right_type, FloatingPoint) else Integer()
+            result = left_value * right_value
+            result_type = Integer() if isinstance(left_type, Integer) and isinstance(right_type, Integer) else FloatingPoint()
             return (result, result_type, final_state)
 
+
         case Divide(left=left, right=right):
+            """ TODO: Implement. """
             left_value, left_type, new_state = evaluate(left, state)
             right_value, right_type, final_state = evaluate(right, new_state)
 
             if isinstance(left_type, (Integer, FloatingPoint)) and isinstance(right_type, (Integer, FloatingPoint)):
                 if right_value == 0:
                     raise InterpMathError("Division by zero error.")
-                result = left_value / right_value
-                result_type = FloatingPoint() if isinstance(left_type, FloatingPoint) or isinstance(right_type, FloatingPoint) else Integer()
-                return (result, result_type, final_state)
+                result = left_value // right_value if isinstance(left_type, Integer) and isinstance(right_type, Integer) else left_value / right_value
+                return (result, left_type if isinstance(left_type, Integer) else right_type, final_state)
             else:
                 raise InterpTypeError("Division requires numeric types.")
-
 
 
         case And(left=left, right=right):
