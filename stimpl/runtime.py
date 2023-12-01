@@ -86,12 +86,14 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
         case Sequence(exprs=exprs) | Program(exprs=exprs):
             """ TODO: Implement. """
-            if not exprs:  # Check if the list of expressions is empty
-                return (None, Unit(), state)  # Return a default value
-            last_value, last_type, last_state = (None, Unit(), state)
+            if not exprs:
+                return (None, Unit(), state)
+            last_value, last_type = (None, Unit())
+            current_state = state
             for expr in exprs:
-                last_value, last_type, last_state = evaluate(expr, state)
-            return (last_value, last_type, last_state)
+                last_value, last_type, current_state = evaluate(expr, current_state)
+            return (last_value, last_type, current_state)
+
 
 
         case Variable(variable_name=variable_name):
