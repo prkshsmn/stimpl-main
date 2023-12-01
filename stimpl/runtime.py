@@ -205,18 +205,13 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
         case Or(left=left, right=right):
             """ TODO: Implement. """
-            # Evaluate the left operand
             left_value, left_type, new_state = evaluate(left, state)
-
-            # Short-circuit if the left operand is True
-            if left_type == Boolean() and left_value is True:
-                return (True, Boolean(), new_state)
-
-            # Evaluate the right operand if the left operand is not True
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            # Perform logical OR and return the result
-            result = (left_value or right_value) and left_type == Boolean() and right_type == Boolean()
+            if not isinstance(left_type, Boolean) or not isinstance(right_type, Boolean):
+                raise InterpTypeError("Or operation requires boolean operands.")
+
+            result = left_value or right_value
             return (result, Boolean(), new_state)
 
         case Not(expr=expr):
