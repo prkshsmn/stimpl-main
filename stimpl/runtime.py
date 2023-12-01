@@ -140,10 +140,9 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             left_value, left_type, new_state = evaluate(left, state)
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            if not ((isinstance(left_type, Integer) and isinstance(right_type, Integer)) or 
-                    (isinstance(left_type, FloatingPoint) and isinstance(right_type, FloatingPoint))):
+            if not (isinstance(left_type, type(right_type)) and (isinstance(left_type, Integer) or isinstance(left_type, FloatingPoint))):
                 raise InterpTypeError("Subtraction requires operands of the same numeric type.")
-            
+
             result = left_value - right_value
             return (result, left_type, new_state)
 
