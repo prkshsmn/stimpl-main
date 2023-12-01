@@ -24,17 +24,13 @@ class State(object):
 
     def get_value(self, variable_name) -> Any:
         """ TODO: Implement. """
-        # Check if the current state has the variable, return its value if found.
         if self.variable_name == variable_name:
             return self.value
-
-        # If not found, recursively search in the next state.
         elif self.next_state is not None:
             return self.next_state.get_value(variable_name)
-
-        # If the variable is not found in any state, raise an error.
         else:
-            raise InterpError(f"Variable '{variable_name}' not found.")
+            # Variable not found in any state, indicate it's uninitialized
+            return None
         
     def __repr__(self) -> str:
         return f"{self.variable_name}: {self.value}, " + repr(self.next_state)
