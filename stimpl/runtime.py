@@ -276,11 +276,9 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             # Evaluate the right operand
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            # Check if both operands are of compatible types (Integer, FloatingPoint, String, or Boolean)
             if not (isinstance(left_type, type(right_type)) and isinstance(left_type, (Integer, FloatingPoint, String, Boolean))):
                 raise InterpTypeError("Lte operation requires operands of compatible types (Integer, FloatingPoint, String, or Boolean).")
 
-            # Perform the comparison and return the result
             result = left_value <= right_value
             return (result, Boolean(), new_state)
 
