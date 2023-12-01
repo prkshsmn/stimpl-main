@@ -182,8 +182,9 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
                 # Check for division by zero
                 if right_value == 0:
                     raise InterpMathError("Division by zero error.")
-                # Perform division and return the result with the appropriate type
-                return (left_value / right_value, left_type if isinstance(left_type, Integer) else right_type, new_state)
+                # Perform integer division and return the result with the appropriate type
+                result = left_value // right_value
+                return (result, left_type if isinstance(left_type, Integer) else right_type, new_state)
             else:
                 raise InterpTypeError("Division requires numeric types.")
 
