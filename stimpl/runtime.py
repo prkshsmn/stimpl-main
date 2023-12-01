@@ -24,13 +24,13 @@ class State(object):
 
     def get_value(self, variable_name) -> Any:
         """ TODO: Implement. """
-        current_state = self
-        while current_state is not None:
-            if current_state.variable_name == variable_name:
-                return current_state.value
-            current_state = current_state.next_state
-        raise InterpSyntaxError(f"Cannot read from {variable_name} before assignment.")
-
+        if self.variable_name == variable_name:
+            return self.value
+        elif self.next_state is not None:
+            return self.next_state.get_value(variable_name)
+        else:
+            # Variable not found in any state, indicate it's uninitialized
+            return None
         
     def __repr__(self) -> str:
         return f"{self.variable_name}: {self.value}, " + repr(self.next_state)
