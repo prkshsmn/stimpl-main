@@ -90,11 +90,13 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
         case Sequence(exprs=exprs) | Program(exprs=exprs):
             """ TODO: Implement. """
-        # Handling for Sequence and Program expressions
-            last_value = None
+            if not exprs:  # Check if the list of expressions is empty
+                return (None, Unit(), state)  # Return a default value
+            last_value, last_type, last_state = (None, Unit(), state)
             for expr in exprs:
-                last_value = evaluate(expr, state)
-            return last_value
+                last_value, last_type, last_state = evaluate(expr, state)
+            return (last_value, last_type, last_state)
+
 
         case Variable(variable_name=variable_name):
             value = state.get_value(variable_name)
