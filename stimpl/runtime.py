@@ -153,12 +153,19 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             # Evaluate the right operand
             right_value, right_type, new_state = evaluate(right, new_state)
 
-            # Check if both operands are of numeric types
-            if isinstance(left_type, (Integer, FloatingPoint)) and isinstance(right_type, (Integer, FloatingPoint)):
-                # Perform multiplication and return the result with the appropriate type
-                return (left_value * right_value, left_type if isinstance(left_type, Integer) else right_type, new_state)
-            else:
-                raise InterpTypeError("Multiplication requires numeric types.")
+            # Check if both operands are of numeric types (Integer or FloatingPoint)
+            if not ((isinstance(left_type, Integer) and isinstance(right_type, Integer)) or 
+                    (isinstance(left_type, FloatingPoint) and isinstance(right_type, FloatingPoint))):
+                raise InterpTypeError("Multiplication requires operands of the same numeric type.")
+
+            # Perform multiplication
+            result = left_value * right_value
+
+            # Determine the result type (keep it as Integer if both operands are integers, otherwise FloatingPoint)
+            result_type = Integer() if isinstance(left_type, Integer) and isinstance(right_type, Integer) else FloatingPoint()
+
+            return (result, result_type, new_state)
+
 
 
         case Divide(left=left, right=right):
